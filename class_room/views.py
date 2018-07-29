@@ -10,13 +10,23 @@ from class_room.serializer import (UserSerializer,
                                    UserRegisterSerializer,
                                    LoginSerializer,
                                    SubjectSerializer,
-                                   ClassSerializer)
+                                   ClassSerializer,
+                                   UserDetailSerializer)
 
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        user_type = request.GET.get("user_type")
+        if user_type and user_type.upper() == "STUDENT":
+            self.queryset = User.objects.filter(user_type=user_type.upper())
+            self.serializer_class = UserDetailSerializer
+
+        return self.list(request, *args, **kwargs)
+
 
 
 class RegisterUser(mixins.CreateModelMixin,
@@ -28,19 +38,6 @@ class RegisterUser(mixins.CreateModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class UserDetail(mixins.RetrieveModelMixin,
-                 mixins.UpdateModelMixin,
-                 mixins.DestroyModelMixin,
-                 generics.GenericAPIView):
-
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
 
 
 class UserLogin(generics.GenericAPIView):
@@ -71,6 +68,7 @@ class SubjectList(mixins.ListModelMixin,
                   generics.GenericAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -85,6 +83,7 @@ class SubjectDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = Subject.objects.all()
     serializer_class = SubjectSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -101,6 +100,7 @@ class ClassList(mixins.ListModelMixin,
                 generics.GenericAPIView):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -115,6 +115,7 @@ class ClassDetail(mixins.RetrieveModelMixin,
                   generics.GenericAPIView):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

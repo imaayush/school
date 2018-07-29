@@ -11,28 +11,22 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parent", "password")
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "password", "classes")
 
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parent")
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "classes")
 
 
-class LoginSerializer(serializers.ModelSerializer):
 
+class ParentSeriailzer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type')
 
-
-class SubjectSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Subject
-        fields = ('id', 'name', 'teacher', 'classes')
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -40,3 +34,41 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ('id', 'name')
+
+
+class SubjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subject
+        fields = ('id', 'name', 'teachers', 'classes')
+
+
+class ClassSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Class
+        fields = ('id', 'name')
+        fields = ('id', 'name')
+
+class ClassDetailsSerializer(serializers.ModelSerializer):
+    subjects = SubjectSerializer(many=True)
+    class Meta:
+        model = Class
+        fields = ('id', 'name', 'subjects')
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    classes = ClassDetailsSerializer(many=True)
+    parents = ParentSeriailzer(many=True)
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "classes")
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+
+
