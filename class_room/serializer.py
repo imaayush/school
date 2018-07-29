@@ -2,8 +2,15 @@
 from rest_framework import serializers
 from class_room.models import User, Subject, Class
 
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
+        if not validated_data.get("parents"):
+            validated_data.pop("parents")
+
+        if not validated_data.get("classes"):
+            validated_data.pop("classes")
+
         user = User.objects.create(**validated_data)
         user.set_password(user.password)
         user.save()

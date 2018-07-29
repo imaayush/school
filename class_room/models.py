@@ -18,8 +18,8 @@ class Class(BaseMixin):
 
 class User(AbstractUser, BaseMixin):
     user_type = models.CharField(choices=USER_TYPE, max_length=20, default=USER_TYPE[2][0])
-    classes = models.ManyToManyField(Class)
-    parents = models.ManyToManyField('User')
+    classes = models.ManyToManyField(Class, blank=True)
+    parents = models.ManyToManyField('User', blank=True)
 
     class Meta:
         ordering = ('created_at',)
