@@ -2,6 +2,16 @@
 school management system
 
 #### Login API
+     POST api/v1/user/login
+        Request : {
+                    username: "aayush",
+                    password: 123456
+                   }
+        Response : {
+                   "username": "aayush",
+                   "token": "a0dc9927e4454cb34ff67796b6658b4fead4b0b2",
+                   "user_id": 1
+                    }
 
 #### Registration API
      POST api/v1/user/
