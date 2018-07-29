@@ -40,6 +40,21 @@ school management system
                }
 
 #### API which will list the users.
+     GET api/v1/users/
+     HEADER : Authorization Token 0fa8f31a25492c04a03f02a2467daddf06b12de2
+     
+     Response : [
+                   {
+                       "id": 1,
+                       "username": "aayush",
+                       "first_name": "",
+                       "last_name": "",
+                       "email": "",
+                       "user_type": "STUDENT",
+                       "parents": [],
+                       "classes": []
+                   }
+               ]
 
 #### API which will create,list,update and delete the subjects.
 
