@@ -22,9 +22,9 @@ school management system
                   "last_name": "",
                   "email": "",
                   "user_type": "STUDENT",
-                  "parents": [],
-                  "password": "pbkdf2_sha256$36000$cPat0eqKPEAi$u+JBSwtJ2YW6A4PlbJDCsmssCQ30T2PUnYqo91n10FA=",
-                  "classes": []
+                  "parents": [], opitional
+                  "password": "123456",
+                  "user_class": 1 opitional
               }
      
      Response: {
@@ -35,8 +35,7 @@ school management system
                    "email": "",
                    "user_type": "STUDENT",
                    "parents": [],
-                   "password": "pbkdf2_sha256$36000$cPat0eqKPEAi$u+JBSwtJ2YW6A4PlbJDCsmssCQ30T2PUnYqo91n10FA=",
-                   "classes": []
+                   "classes": 1
                }
 
 #### API which will list the users.
@@ -52,7 +51,7 @@ school management system
                        "email": "",
                        "user_type": "STUDENT",
                        "parents": [],
-                       "classes": []
+                       "user_class": 
                    }
                ]
 
@@ -169,7 +168,7 @@ school management system
                           "user_type": "PARENT"
                       }
                   ],
-                  "classes": [
+                  "user_class": 
                       {
                           "id": 1,
                           "name": "endglish",
@@ -180,10 +179,8 @@ school management system
                                   "teachers": [
                                       2
                                   ],
-                                  "classes": [
-                                      1
-                                  ]
+                     
                               }
-                          ]
+                          
                       }
                   ]
