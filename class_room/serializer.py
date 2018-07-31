@@ -58,7 +58,7 @@ class ClassSubjectSerializer(serializers.ModelSerializer):
 
 
 class ClassDetailsSerializer(serializers.ModelSerializer):
-    subjects = SubjectSerializer(many=True)
+    subjects = ClassSubjectSerializer(many=True)
 
     class Meta:
         model = Class
