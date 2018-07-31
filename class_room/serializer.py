@@ -4,36 +4,37 @@ from class_room.models import User, Subject, Class
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(required=False, max_length=50)
+    user_class = serializers.PrimaryKeyRelatedField(required=False, queryset=Class.objects.all())
+    parents = serializers.PrimaryKeyRelatedField(required=False, many=True,  queryset=User.objects.all(), default=[])
+
     def create(self, validated_data):
-        if not validated_data.get("parents"):
-            validated_data.pop("parents")
-
-        if not validated_data.get("classes"):
-            validated_data.pop("classes")
-
+        parents = validated_data.pop("parents")
         user = User.objects.create(**validated_data)
         user.set_password(user.password)
+        if parents:
+            user.parents = parents
         user.save()
-        return user
+        validated_data.pop("password")
+        validated_data["parents"] = parents
+        validated_data["id"] = user.id
+        return validated_data
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "password", "classes")
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', 'parents', 'password', 'user_class')
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "classes")
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', 'parents', 'user_class')
 
 
-
-class ParentSeriailzer(serializers.ModelSerializer):
+class ParentSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type')
-
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -50,25 +51,27 @@ class SubjectSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'teachers', 'classes')
 
 
-class ClassSerializer(serializers.ModelSerializer):
-
+class ClassSubjectSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Class
-        fields = ('id', 'name')
-        fields = ('id', 'name')
+        model = Subject
+        fields = ('id', 'name', 'teachers')
+
 
 class ClassDetailsSerializer(serializers.ModelSerializer):
     subjects = SubjectSerializer(many=True)
+
     class Meta:
         model = Class
         fields = ('id', 'name', 'subjects')
 
+
 class UserDetailSerializer(serializers.ModelSerializer):
-    classes = ClassDetailsSerializer(many=True)
-    parents = ParentSeriailzer(many=True)
+    user_class = ClassDetailsSerializer(many=False)
+    parents = ParentSerializer(many=True)
+
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "classes")
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'user_type', "parents", "user_class")
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -77,5 +80,3 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password')
-
-
